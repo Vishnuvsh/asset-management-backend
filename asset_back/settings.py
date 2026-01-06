@@ -20,10 +20,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = os.environ.get("DEBUG") == "True"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
-
-ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -55,7 +53,9 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://asset-management-frontend-ochre.vercel.app",
+]
 
 ROOT_URLCONF = 'asset_back.urls'
 

@@ -16,12 +16,13 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'django-insecure-+&8k1v#(zq$y@3k1f0q8v1n)l$e5m3z7u@#xj&!a8h3zj7x9q0'
 
-DEBUG = os.environ.get("DEBUG") == "True"
+DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
+
+ALLOWED_HOSTS = ['vishnuv.pythonanywhere.com']
 
 
 # Application definition
@@ -50,12 +51,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://asset-management-frontend-ochre.vercel.app",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'asset_back.urls'
 

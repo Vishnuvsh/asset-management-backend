@@ -2,6 +2,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+
 class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = "email"
 
@@ -14,24 +17,15 @@ class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
                 {"detail": "Email and password are required"}
             )
 
-        user = authenticate(
-            request=self.context.get("request"),
-            email=email,
-            password=password
-        )
-
-        if user is None:
-            raise serializers.ValidationError(
-                {"detail": "Invalid email or password"}
-            )
-
         data = super().validate({
             "email": email,
             "password": password
         })
 
+        user = self.user
         data["role"] = user.role
         return data
+
 
              
 from rest_framework import serializers

@@ -22,7 +22,8 @@ DEBUG = False
 
 
 
-ALLOWED_HOSTS = ['vishnuv.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition

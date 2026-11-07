@@ -5,18 +5,18 @@ class EmailLoginView(TokenObtainPairView):
     serializer_class = EmailTokenObtainPairSerializer
 
 
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from .models import User
 from .serializers import EmployeeSerializer
 from .permissions import IsAdmin
 
-class EmployeeViewSet(ReadOnlyModelViewSet):
+class EmployeeViewSet(ModelViewSet):
     serializer_class = EmployeeSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_queryset(self):
-        return User.objects.filter(role="EMPLOYEE")
+        return User.objects.exclude(role="ADMIN")
 
 # view for user profile
 

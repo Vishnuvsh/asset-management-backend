@@ -185,6 +185,13 @@ class TicketViewSet(ModelViewSet):
     @action(detail=True, methods=["post"], permission_classes=[IsAdmin])
     def assign(self, request, pk=None):
         ticket = self.get_object()
+
+        if ticket.status in ["RESOLVED", "CLOSED"]:
+            return Response(
+                {"error": "Cannot assign a resolved or closed ticket."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         technician_id = request.data.get("technician_id")
 
         if not technician_id:
@@ -257,8 +264,9 @@ class TicketViewSet(ModelViewSet):
         ticket.status = "CLOSED"
         ticket.save()
 
-        # Asset back to ASSIGNED
-        ticket.asset.status = "ASSIGNED"
+        # Restore asset status based on active assignment
+        has_active_assignment = ticket.asset.assignment_set.filter(date_returned__isnull=True).exists()
+        ticket.asset.status = "ASSIGNED" if has_active_assignment else "AVAILABLE"
         ticket.asset.save()
 
         return Response(

@@ -25,12 +25,14 @@ class AssetViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         inventory_item = serializer.validated_data.get('inventory_item')
-        if inventory_item:
-            if inventory_item.quantity <= 0:
-                from rest_framework.exceptions import ValidationError
-                raise ValidationError({"inventory_item": "Inventory stock is 0. Cannot add asset."})
-            inventory_item.quantity -= 1
-            inventory_item.save()
+        if not inventory_item:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"inventory_item": "Please select an inventory item. Assets must originate from inventory."})
+        if inventory_item.quantity <= 0:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"inventory_item": f"'{inventory_item.item_name}' is out of stock!"})
+        inventory_item.quantity -= 1
+        inventory_item.save()
         serializer.save()
 
     def perform_destroy(self, instance):

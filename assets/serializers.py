@@ -3,9 +3,18 @@ from .models import Asset, InventoryItem, Assignment, RepairTicket
 
 
 class AssetSerializer(serializers.ModelSerializer):
+    inventory_item_name = serializers.CharField(source='inventory_item.item_name', read_only=True)
+    assigned_to = serializers.SerializerMethodField()
+
     class Meta:
         model = Asset
         fields = "__all__"
+
+    def get_assigned_to(self, obj):
+        active_assignment = obj.assignment_set.filter(date_returned__isnull=True).first()
+        if active_assignment:
+            return active_assignment.employee.email
+        return None
 
 
 class InventorySerializer(serializers.ModelSerializer):

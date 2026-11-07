@@ -23,6 +23,22 @@ class AssetViewSet(ModelViewSet):
             assignment__employee=user
         )
 
+    def perform_create(self, serializer):
+        inventory_item = serializer.validated_data.get('inventory_item')
+        if inventory_item:
+            if inventory_item.quantity <= 0:
+                from rest_framework.exceptions import ValidationError
+                raise ValidationError({"inventory_item": "Inventory stock is 0. Cannot add asset."})
+            inventory_item.quantity -= 1
+            inventory_item.save()
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.inventory_item:
+            instance.inventory_item.quantity += 1
+            instance.inventory_item.save()
+        instance.delete()
+
     @action(detail=False, methods=["get"], url_path="assigned")
     def assigned_assets(self, request):
         assets = self.get_queryset()

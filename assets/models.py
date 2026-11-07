@@ -18,6 +18,13 @@ class Asset(models.Model):
     serial_number = models.CharField(max_length=100, unique=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='AVAILABLE')
     purchase_date = models.DateField(null=True, blank=True)
+    inventory_item = models.ForeignKey(
+        'InventoryItem',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='assets'
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 

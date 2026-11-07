@@ -11,8 +11,9 @@ class AssetAdmin(admin.ModelAdmin):
 
 @admin.register(InventoryItem)
 class InventoryItemAdmin(admin.ModelAdmin):
-    list_display = ('item_name', 'quantity', 'threshold')
-    search_fields = ('item_name',)
+    list_display = ('item_name', 'category', 'quantity', 'threshold')
+    list_filter = ('category',)
+    search_fields = ('item_name', 'category')
 
 
 @admin.register(Assignment)

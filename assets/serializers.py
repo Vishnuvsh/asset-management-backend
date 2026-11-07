@@ -4,6 +4,7 @@ from .models import Asset, InventoryItem, Assignment, RepairTicket
 
 class AssetSerializer(serializers.ModelSerializer):
     inventory_item_name = serializers.CharField(source='inventory_item.item_name', read_only=True)
+    inventory_item_category = serializers.CharField(source='inventory_item.category', read_only=True)
     assigned_to = serializers.SerializerMethodField()
 
     class Meta:

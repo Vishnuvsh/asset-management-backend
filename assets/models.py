@@ -38,13 +38,14 @@ class Asset(models.Model):
 class InventoryItem(models.Model):
 
     item_name = models.CharField(max_length=100)
+    category = models.CharField(max_length=100, default="General")
     quantity = models.PositiveIntegerField()
     threshold = models.PositiveIntegerField(help_text="Minimum stock alert level")
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.item_name
+        return f"{self.item_name} ({self.category})"
 
 
 # ======================
